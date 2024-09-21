@@ -12,7 +12,7 @@ body {
   width: 95%;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 1em;
+  padding-bottom: 2em;
 }
 
 @media only screen and (min-width: 768px) {
@@ -83,7 +83,7 @@ nav li {
 }
 
 .logo {
-  font-size: 40px;
+  font-size: 30px;
 }
 
 #tools a {
@@ -102,9 +102,9 @@ nav li {
 
 .message {
   position: absolute; 
-  width: 150px;
+  width: auto;
   top: 20%; 
-  left: 5%; 
+  
   z-index: 1; 
   background: rgba(
     255,
@@ -118,9 +118,7 @@ nav li {
 .message_text {
   margin-bottom: 10px; 
 }
-
 .message_text p {
-  font-size: 18px;
   margin: 1.5px;
   color: var(--main-accent);
 }
@@ -175,7 +173,6 @@ nav li {
 
 .list ul li {
   padding: 5px;
-  font-size: 20px;
 }
 
 @media only screen and (min-width: 768px) {
@@ -205,6 +202,10 @@ nav li {
   a {
     text-decoration: none;
     color: black;
+  }
+
+  .logo {
+    font-size: 40px;
   }
 
   .carbackground {
