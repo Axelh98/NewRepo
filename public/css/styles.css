@@ -6,6 +6,7 @@
 }
 body {
   margin: 0;
+  font-family: 'Roboto', sans-serif;
 }
 #wrapper {
   width: 95%;
@@ -44,7 +45,6 @@ body {
 }
 #wrapper {
   width: 95%;
-  /* Added this to make sure that the background inside the wrapper is always white */
   background-color: var(--primary-background);
   margin-left: auto;
   margin-right: auto;
@@ -63,7 +63,7 @@ a {
 }
 
 nav {
-  background-color: black; /* Fondo negro */
+  background-color: black; 
   padding: 10px;
 }
 
@@ -91,32 +91,32 @@ nav li {
 }
 
 .carbackground {
-  position: relative; /* Para el contexto de posicionamiento de la imagen */
-  flex: 1; /* Para que ocupe el espacio restante */
+  position: relative; 
+  flex: 1; 
 }
 
 .carbackground img {
-  width: 100%; /* Hacer que la imagen ocupe el 100% del contenedor */
-  height: auto; /* Mantener la proporción de la imagen */
+  width: 100%;
+  height: auto; 
 }
 
 .message {
-  position: absolute; /* Posicionar el mensaje de forma absoluta */
+  position: absolute; 
   width: 150px;
-  top: 20%; /* Ajustar para que esté más cerca de la imagen */
-  left: 5%; /* Espaciado desde la izquierda */
-  z-index: 1; /* Asegurar que el texto esté encima de la imagen */
+  top: 20%; 
+  left: 5%; 
+  z-index: 1; 
   background: rgba(
     255,
     255,
     255,
     0.8
-  ); /* Fondo semi-transparente (opcional) */
-  padding: 10px; /* Espaciado interno */
+  ); 
+  padding: 10px; 
 }
 
 .message_text {
-  margin-bottom: 10px; /* Espacio entre el texto y el botón */
+  margin-bottom: 10px; 
 }
 
 .message_text p {
@@ -144,30 +144,30 @@ nav li {
 
 .wrapper_cards {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Agrupar las imágenes en dos columnas */
-  gap: 15px; /* Espacio entre las tarjetas */
+  grid-template-columns: 1fr 1fr; 
+  gap: 15px; 
 }
 
 .body_card {
-  background-color: var(--main-accent); /* Fondo de las tarjetas */
-  border-radius: 8px; /* Bordes redondeados */
+  background-color: var(--main-accent); 
+  border-radius: 8px; 
   padding: 10px;
   text-align: center;
 }
 
 .card_image img {
-  max-width: 100%; /* Asegurarse de que las imágenes no se salgan del contenedor */
+  max-width: 100%;
   height: auto;
 }
 
 .card_link a {
-  text-decoration: none; /* Eliminar subrayado del enlace */
-  color: #333; /* Color del texto del enlace */
+  text-decoration: none;
+  color: #333; 
   font-weight: bold;
 }
 
 .reviews {
-  background-color: #f9f9f9; /* Fondo para la columna de reseñas */
+
   padding: 15px;
   border-radius: 8px;
 }
@@ -180,7 +180,6 @@ nav li {
 
 @media only screen and (min-width: 768px) {
   body {
-    /* You could use a regular image, but went with gradients */
     background-image: url(/images/site/checkerboard.jpg);
     background-size: auto;
     display: flex;
@@ -188,7 +187,6 @@ nav li {
     height: 100vh;
   }
   #wrapper {
-    /* This is the blueish border around the desktop version */
     border: 5px solid var(--main-accent);
     border-radius: 10px;
     margin-top: 1rem;
@@ -210,32 +208,32 @@ nav li {
   }
 
   .carbackground {
-    position: relative; /* Para el contexto de posicionamiento de la imagen */
-    flex: 1; /* Para que ocupe el espacio restante */
+    position: relative;
+    flex: 1; 
   }
 
   .carbackground img {
-    width: 100%; /* Hacer que la imagen ocupe el 100% del contenedor */
-    height: auto; /* Mantener la proporción de la imagen */
+    width: 100%; 
+    height: auto; 
   }
 
   .message {
-    position: absolute; /* Posicionar el mensaje de forma absoluta */
+    position: absolute;
     width: 200px;
-    top: 20%; /* Ajustar para que esté más cerca de la imagen */
-    left: 7%; /* Espaciado desde la izquierda */
-    z-index: 1; /* Asegurar que el texto esté encima de la imagen */
+    top: 20%; 
+    left: 7%; 
+    z-index: 1; 
     background: rgba(
       255,
       255,
       255,
       0.8
-    ); /* Fondo semi-transparente (opcional) */
-    padding: 10px; /* Espaciado interno */
+    ); 
+    padding: 10px; 
   }
 
   .message_text {
-    margin-bottom: 10px; /* Espacio entre el texto y el botón */
+    margin-bottom: 10px; 
   }
 
   .message_text p {
@@ -258,38 +256,37 @@ nav li {
 
   .upgrades_cards {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Dos columnas de igual tamaño */
-    gap: 20px; /* Espacio entre las columnas */
+    grid-template-columns: 1fr 1fr;
+    gap: 20px; 
     padding: 20px;
   }
 
   
   .wrapper_cards {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Agrupar las imágenes en dos columnas */
-    gap: 15px; /* Espacio entre las tarjetas */
+    grid-template-columns: 1fr 1fr; 
+    gap: 15px; 
   }
   
   .body_card {
-    background-color: #f4f4f4; /* Fondo de las tarjetas */
-    border-radius: 8px; /* Bordes redondeados */
+    background-color: var(--main-accent); 
+    border-radius: 8px; 
     padding: 10px;
     text-align: center;
   }
   
   .card_image img {
-    max-width: 100%; /* Asegurarse de que las imágenes no se salgan del contenedor */
+    max-width: 100%; 
     height: auto;
   }
   
   .card_link a {
-    text-decoration: none; /* Eliminar subrayado del enlace */
-    color: #333; /* Color del texto del enlace */
+    text-decoration: none; 
+    color: #333; 
     font-weight: bold;
   }
   
   .reviews {
-    background-color: #f9f9f9; /* Fondo para la columna de reseñas */
     padding: 15px;
     border-radius: 8px;
   }
@@ -303,10 +300,4 @@ nav li {
     padding: 4px;
     font-size: 20px;
   }
-  
-  
-
-
-
-
 }
