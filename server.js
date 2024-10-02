@@ -9,7 +9,10 @@ const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const env = require("dotenv").config();
 const app = express();
+const baseController = require("./controllers/basecontroller");
+const inventoryRoute = require("./routes/inventoryRoute")
 const static = require("./routes/static");
+
 
 /* *********************** --frozen-lockfile
  * View Engine and templates
@@ -24,10 +27,14 @@ app.set("layout", "./layouts/layout") // not at views root
  *************************/
 app.use(static)
 // Indez route
+app.get("/", baseController.buildHome)
+app.use("/inv", inventoryRoute)
+
+/* 
 app.get("/", function(req, res) {
   res.render("index", {title:"home"})
 })
-
+*/
 
 /* ***********************
  * Local Server Information
@@ -42,3 +49,4 @@ const host = process.env.HOST
 app.listen(port, () => {
   console.log(`app listening on ${host}:${port}`)
 })
+
