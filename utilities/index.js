@@ -60,4 +60,42 @@ Util.buildClassificationGrid = async function(data){
     return grid
   }
 
+
+
+/* **************************************
+* Build the vehicle detail HTML
+************************************** */
+Util.buildVehicleDetail = async function(vehicle) {
+  if (!vehicle) {
+      return "<p>Vehicle details not found</p>";
+  }
+
+  let detail = "";
+  detail += '<h1>' + vehicle.inv_year + ' ' + vehicle.inv_make + '</h1>';
+
+  detail += '<div class="wrapper_vehicule">'
+    detail += '<div class="vehicle-img">';
+    detail += '<img src="' + vehicle.inv_image + '" alt="Image of ' + vehicle.inv_make + ' ' + vehicle.inv_model + '">';
+    detail += '</div>'
+
+    detail += '<div class="vehicle-detail">'; // Inicia un contenedor para los detalles del vehículo
+    detail += '<h1>' + vehicle.inv_make + ' ' + vehicle.inv_model + '</h1>';
+    detail += '<p class="veh-price">Price: $' + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</p>';
+    detail += '<p class="veh-p"><span>Descripcion</span>: ' + vehicle.inv_description + '</p>'
+    detail += '<p class="veh-p"><span>Color</span>:' + ' ' + vehicle.inv_color + '</p>'
+    detail += '<p class="veh-p"><span>Milles</span>' + ' ' + vehicle.inv_miles + '</p>'
+    detail += '</div>'; // Cierra el contenedor
+  detail += '</div>'
+  return detail;
+}
+
+
+
+  /* ****************************************
+ * Middleware For Handling Errors
+ * Wrap other function in this for 
+ * General Error Handling
+ **************************************** */
+Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
+
 module.exports = Util

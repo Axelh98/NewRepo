@@ -6,7 +6,7 @@
 }
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 #wrapper {
   width: 95%;
@@ -63,7 +63,7 @@ a {
 }
 
 nav {
-  background-color: black; 
+  background-color: black;
   padding: 10px;
 }
 
@@ -75,7 +75,7 @@ nav ul {
   margin: 0;
 }
 
-nav li a{
+nav li a {
   color: white;
   font-size: 18px;
 }
@@ -89,32 +89,27 @@ nav li a{
 }
 
 .carbackground {
-  position: relative; 
-  flex: 1; 
+  position: relative;
+  flex: 1;
 }
 
 .carbackground img {
   width: 100%;
-  height: auto; 
+  height: auto;
 }
 
 .message {
-  position: absolute; 
+  position: absolute;
   width: auto;
-  top: 20%; 
-  
-  z-index: 1; 
-  background: rgba(
-    255,
-    255,
-    255,
-    0.8
-  ); 
-  padding: 10px; 
+  top: 20%;
+
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 10px;
 }
 
 .message_text {
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
 }
 .message_text p {
   margin: 1.5px;
@@ -140,13 +135,13 @@ nav li a{
 
 .wrapper_cards {
   display: grid;
-  grid-template-columns: 1fr 1fr; 
-  gap: 15px; 
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
 }
 
 .body_card {
-  background-color: var(--main-accent); 
-  border-radius: 8px; 
+  background-color: var(--main-accent);
+  border-radius: 8px;
   padding: 10px;
   text-align: center;
 }
@@ -158,16 +153,14 @@ nav li a{
 
 .card_link a {
   text-decoration: none;
-  color: #333; 
+  color: #333;
   font-weight: bold;
 }
 
 .reviews {
-
   padding: 15px;
   border-radius: 8px;
-} 
-
+}
 
 .list ul li {
   padding: 5px;
@@ -177,19 +170,11 @@ nav li a{
 /* - - - CLASSIFICATION STYLES ! ! ! */
 /* - - - CLASSIFICATION STYLES ! ! ! */
 #inv-display {
+  width: 90%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 20px;
-  grid-row-gap: 30px;
-}
-
-
-.card-body {
-  
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  align-content: center;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 15px;
+ 
 }
 
 .card-body li {
@@ -197,15 +182,12 @@ nav li a{
   height: 300px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  align-content: center;
   list-style: none;
-  box-shadow: 9px 5px 19px -6px rgba(0,0,0,0.75);
+  box-shadow: 9px 5px 19px -6px rgba(0, 0, 0, 0.75);
 }
 
 .card-body li a,
-.card-body li a img
-{
+.card-body li a img {
   width: 100%;
   max-height: 200px;
 }
@@ -217,7 +199,28 @@ nav li a{
   align-content: center;
 }
 
+/* - - - VEHICULES STYLES ! ! ! */
+/* - - - VEHICULES STYLES ! ! ! */
+/* - - - VEHICULES STYLES ! ! ! */
 
+.wrapper_vehicule {
+  display: flex;
+  flex-direction: column;
+}
+
+.vehicle-img img {
+  width: 95%;
+}
+
+.veh-price {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.veh-p span {
+  font-size: 19px;
+  font-weight: bold;
+}
 
 @media only screen and (min-width: 768px) {
   body {
@@ -254,31 +257,26 @@ nav li a{
 
   .carbackground {
     position: relative;
-    flex: 1; 
+    flex: 1;
   }
 
   .carbackground img {
-    width: 100%; 
-    height: auto; 
+    width: 100%;
+    height: auto;
   }
 
   .message {
     position: absolute;
     width: 200px;
-    top: 20%; 
-    left: 7%; 
-    z-index: 1; 
-    background: rgba(
-      255,
-      255,
-      255,
-      0.8
-    ); 
-    padding: 10px; 
+    top: 20%;
+    left: 7%;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px;
   }
 
   .message_text {
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
   }
 
   .message_text p {
@@ -302,40 +300,39 @@ nav li a{
   .upgrades_cards {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px; 
+    gap: 20px;
     padding: 20px;
   }
 
-  
   .wrapper_cards {
     display: grid;
-    grid-template-columns: 1fr 1fr; 
-    gap: 15px; 
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
   }
-  
+
   .body_card {
-    background-color: var(--main-accent); 
-    border-radius: 8px; 
+    background-color: var(--main-accent);
+    border-radius: 8px;
     padding: 10px;
     text-align: center;
   }
-  
+
   .card_image img {
-    max-width: 100%; 
+    max-width: 100%;
     height: auto;
   }
-  
+
   .card_link a {
-    text-decoration: none; 
-    color: #333; 
+    text-decoration: none;
+    color: #333;
     font-weight: bold;
   }
-  
+
   .reviews {
     padding: 15px;
     border-radius: 8px;
   }
-  
+
   .reviews h3,
   .upgrades h3 {
     margin-bottom: 15px;
@@ -344,5 +341,65 @@ nav li a{
   .list ul li {
     padding: 4px;
     font-size: 20px;
+  }
+
+  /* - - - CLASSIFICATION STYLES ! ! ! */
+  /* - - - CLASSIFICATION STYLES ! ! ! */
+  /* - - - CLASSIFICATION STYLES ! ! ! */
+  #inv-display {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+    grid-row-gap: 30px;
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+  }
+
+  .card-body li {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    list-style: none;
+    box-shadow: 9px 5px 19px -6px rgba(0, 0, 0, 0.75);
+  }
+
+  .card-body li a,
+  .card-body li a img {
+    width: 100%;
+    max-height: 200px;
+  }
+
+  .namePrice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+  }
+
+  /* - - - VEHICULES STYLES ! ! ! */
+  /* - - - VEHICULES STYLES ! ! ! */
+  /* - - - VEHICULES STYLES ! ! ! */
+
+  .wrapper_vehicule {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .veh-price {
+    font-size: 22px;
+    font-weight: bold;
+  }
+
+  .veh-p span {
+    font-size: 19px;
+    font-weight: bold;
   }
 }
