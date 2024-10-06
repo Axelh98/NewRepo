@@ -28,8 +28,22 @@ app.set("layout", "./layouts/layout") // not at views root
  *************************/
 app.use(static)
 // Index route
+
 app.get("/", utilities.handleErrors(baseController.buildHome))
 app.use("/inv", inventoryRoute)
+
+// Ruta para provocar el error 500 intencionalmente
+app.get("/cause-error", (req, res, next) => {
+  try {
+    throw new Error("Este es un error 500 intencional") // Genera el error
+  } catch (err) {
+    next(err) // Pasa el error al middleware
+  }
+})
+
+app.get("/", function(req, res) {
+  res.render("index", {title:"home"})
+})
 
 
 // File Not Found Route - must be last route in list
@@ -37,9 +51,17 @@ app.use(async (req, res, next) => {
   next({status: 404, message: 'Sorry, we appear to have lost that page.'})
 })
 
-app.get("/", function(req, res) {
-  res.render("index", {title:"home"})
-})
+// Middleware de manejo de errores
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Muestra el error en la consola
+  const status = err.status || 500; // Obtiene el código de estado
+  res.status(status).render('error', {
+    title: 'Server Error',
+    message: err.message,
+    status: status
+  });
+});
+
 
 
 /* ***********************
