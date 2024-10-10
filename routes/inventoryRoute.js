@@ -17,6 +17,4 @@ router.get('/cause-error', (req, res, next) => {
     next(error); // Pasa el error al middleware de manejo de errores
   });
 
-  
-
 module.exports = router;

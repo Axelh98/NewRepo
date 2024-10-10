@@ -174,7 +174,6 @@ nav li a {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   gap: 15px;
- 
 }
 
 .card-body li {
@@ -220,6 +219,17 @@ nav li a {
 .veh-p span {
   font-size: 19px;
   font-weight: bold;
+}
+
+
+#pswdbtn {
+  border: 2px solid #000;
+  border-radius: 5px;
+  padding: 2px;
+  margin-top: 1em;
+  font-size: small;
+  width: 7em;
+  text-align: center;
 }
 
 @media only screen and (min-width: 768px) {
@@ -401,5 +411,52 @@ nav li a {
   .veh-p span {
     font-size: 19px;
     font-weight: bold;
+  }
+
+  /* - - - LOGIN  */
+  /* - - - LOGIN  */
+  /* - - - LOGIN  */
+
+ 
+  form {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2em;
+    background-color: #01b0d3;
+  }
+  .body-login {
+    padding: 0.5em;
+    border: 1px white solid;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-group label {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 0.2em;
+  }
+
+  .form-group input {
+    width: 50%;
+    height: 25px;
+  }
+  .form-group p {
+    font-size: 22px;
+    font-weight: bold;
+  }
+
+  .form-group button {
+    width: 100px;
+    padding: 0.3em;
+  }
+  .sign-up p{
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
   }
 }
