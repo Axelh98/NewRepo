@@ -59,23 +59,23 @@ async function checkExistingClassification(classificationName) {
  *  Add a new vehicle to the inventory
  * ************************** */
 async function addVehicle({
-  classification,
-  make,
-  model,
-  description,
-  image,
-  thumbnail,
-  price,
-  year,
-  miles,
-  color,
+  classification_id,
+  inv_make,
+  inv_model,
+  inv_description,
+  inv_image,
+  inv_thumbnail,
+  inv_price,
+  inv_year,
+  inv_miles,
+  inv_color,
 }) {
   const query = `
-    INSERT INTO public.inventory (classification_id, make, model, description, image, thumbnail, price, year, miles, color)
+    INSERT INTO public.inventory (classification_id, inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_price, inv_year, inv_miles, inv_color)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
   `;
 
-  const values = [classification, make, model, description, image, thumbnail, price, year, miles, color];
+  const values = [classification_id, inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_price, inv_year, inv_miles, inv_color];
 
   try {
     await pool.query(query, values);

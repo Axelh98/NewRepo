@@ -22,11 +22,11 @@ async function showNewClassificationForm(req, res, next) {
 
 const showNewInventoryForm = async (req, res) => {
   let nav = await utilities.getNav();
-  const classifications = await utilities.buildClassificationList(); 
+  const classification_id = await utilities.buildClassificationList(); 
   res.render("inventory/new-inventory", {
     title: "New Inventory",
     nav,
-    classifications: classifications, 
+    classification_id: classification_id, 
     errors: req.flash("errors"),
   });
 };
@@ -52,43 +52,47 @@ const addNewClassification = async (req, res) => {
 
 const addNewInventory = async (req, res) => {
     const {
-      classification,
-      make,
-      model,
-      description,
-      image,
-      thumbnail,
-      price,
-      year,
-      miles,
-      color,
+      classification_id, // Cambiado aquí
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_year,
+      inv_miles,
+      inv_color,
     } = req.body;
   
     try {
+      // Aquí asegúrate de que classification_id no esté vacío
+      if (!classification_id) {
+        req.flash('error', 'Classification is required');
+        return res.redirect('/inv/new-inventory'); // Redirigir a la página del formulario
+      }
+  
       await inventoryModel.addVehicle({
-        classification,
-        make,
-        model,
-        description,
-        image,
-        thumbnail,
-        price,
-        year,
-        miles,
-        color,
+        classification_id,
+        inv_make,
+        inv_model,
+        inv_description,
+        inv_image,
+        inv_thumbnail,
+        inv_price,
+        inv_year,
+        inv_miles,
+        inv_color,
       });
-      
-      // Mensaje de éxito
-      req.flash('success', 'Vehicle added successfully!');
-      res.redirect("/inv");
+  
+      req.flash('success', 'Vehicle added successfully');
+      res.redirect('/inv');
     } catch (error) {
       console.error("Error adding new vehicle:", error);
-      
-      // Mensaje de error
-      req.flash('error', 'Error adding new vehicle');
-      res.redirect("/inv");
+      req.flash('error', 'Could not add vehicle');
+      res.redirect('/inv');
     }
   };
+  
   
 
 module.exports = {
