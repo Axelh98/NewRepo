@@ -1,0 +1,75 @@
+<h1><%= title %></h1>
+
+<% if (errors && errors.length > 0) { %>
+  <div class="error-messages">
+    <ul>
+      <% errors.forEach(function(error) { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+
+<% if (messages.success) { %>
+  <div class="alert alert-success"><%= messages.success %></div>
+<% } %>
+<% if (messages.error) { %>
+  <div class="alert alert-danger"><%= messages.error %></div>
+<% } %>
+
+<form action="/inv/new-inventory" method="post">
+  <!-- Campos del formulario -->
+  <div class="form-group" id="new-vehicule">
+    <label for="classification">Classification:</label>
+    <%- classifications %> <!-- Muestra la lista desplegable generada -->
+  </div>
+
+  <div class="form-group" id="new-vehicule">
+    <label for="make">Make:</label>
+    <input type="text" id="make" name="make" required />
+  </div>
+
+  <div class="form-group" id="new-vehicule">
+    <label for="model">Model:</label>
+    <input type="text" id="model" name="model" required />
+  </div>
+
+  <div class="form-group" id="new-vehicule">
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" rows="4" cols="50" required></textarea>
+  </div>
+
+  <div class="form-group" id="new-vehicule">
+    <label for="image">Image Path:</label>
+    <input type="url" id="image" name="image" value="/images/vehicles/no-image.png" />
+  </div>
+
+  <div class="form-group" id="new-vehicule">
+    <label for="thumbnail">Thumbnail Path:</label>
+    <input type="url" id="thumbnail" name="thumbnail" value="/images/vehicles/no-image.png" />
+  </div>
+
+  <div class="form-group" id="new-vehicule">
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" required />
+  </div>
+
+  <div class="form-group" id="new-vehicule">
+    <label for="year">Year:</label>
+    <input type="text" id="year" name="year" required />
+  </div>
+
+  <div class="form-group" id="new-vehicule">
+    <label for="miles">Miles:</label>
+    <input type="number" id="miles" name="miles" required />
+  </div>
+
+  <div class="form-group" id="new-vehicule">
+    <label for="color">Color:</label>
+    <input type="text" id="color" name="color" required />
+  </div>
+
+  <div class="form-group" id="btn-vehicule">
+    <button type="submit">Add Vehicle</button>
+  </div>
+</form>

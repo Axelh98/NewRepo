@@ -7,6 +7,7 @@ async function buildLogin(req, res, next) {
     res.render("account/login", {
         title: "Login",
         nav,
+        errors: null,
     })
 }
 
@@ -18,7 +19,31 @@ async function buildRegister(req, res, next) {
     res.render("account/register", {
       title: "Register",
       nav,
+      errors: null,
     })
+  }
+
+/* ****************************************
+*  Process Login
+* *************************************** */
+async function loginAccount(req, res) {
+    let nav = await utilities.getNav();
+    const { email, password } = req.body;
+  
+    const loginResult = await accountModel.verifyLogin(email, password);
+  
+    if (loginResult) {
+      req.flash("notice", `Welcome back!`);
+      res.redirect("/dashboard"); 
+    } else {
+      req.flash("notice", "Invalid email or password.");
+      res.status(401).render("account/login", {
+        title: "Login",
+        nav,
+        errors: [{ msg: "Invalid email or password." }],
+        email,
+      });
+    }
   }
 
 
@@ -55,4 +80,4 @@ async function registerAccount(req, res) {
     }
   }
 
-module.exports = {buildLogin , buildRegister , registerAccount}
+module.exports = {buildLogin , buildRegister , registerAccount , loginAccount}

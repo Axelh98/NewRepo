@@ -8,11 +8,13 @@
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const session = require("express-session");
+const flash = require("connect-flash");
 const pool = require("./database/");
 const env = require("dotenv").config();
 const app = express();
 const baseController = require("./controllers/basecontroller");
 const inventoryRoute = require("./routes/inventoryRoute");
+const managementRoute = require("./routes/managementRoute");
 const static = require("./routes/static");
 const utilities = require("./utilities/");
 const bodyParser = require("body-parser")
@@ -48,6 +50,10 @@ app.use(
   })
 );
 
+// Inicializa flash
+app.use(flash());
+
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
@@ -66,10 +72,22 @@ app.get("/cause-error", (req, res, next) => {
     next(err); // Pasa el error al middleware
   }
 });
+
+app.use("/inv", managementRoute);
+
 app.use("/account", require("./routes/accountRoute"));
+
 
 app.get("/", function (req, res) {
   res.render("index", { title: "home" });
+});
+
+app.get('/inv', (req, res) => {
+  const messages = {
+    success: req.flash('success'),
+    error: req.flash('error'),
+  };
+  res.render('inventory', { messages });
 });
 
 // Middleware de manejo de errores
@@ -82,8 +100,6 @@ app.use((err, req, res, next) => {
     status: status,
   });
 });
-
-
 
 /* ***********************
  * Local Server Information

@@ -1,0 +1,30 @@
+<!-- new-classification.ejs -->
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } %>
+
+<% if (errors && errors.length > 0) { %>
+<div class="error-messages">
+  <ul>
+    <% errors.forEach(function(error) { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+</div>
+<% } %>
+
+<form action="/inv/new-classification" method="post">
+  <div class="form-group">
+    <div class="classification-text">
+      <p>Classification Name</p>
+      <p>NAME MUST BE ALPHABETIC CHARACTERS ONLY</p>
+    </div>
+    <input
+      type="text"
+      name="classificationName"
+      placeholder="Classification Name"
+      required
+    />
+    <button type="submit">Add Classification</button>
+  </div>
+</form>

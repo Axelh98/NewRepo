@@ -15,6 +15,42 @@ body {
   padding-bottom: 2em;
 }
 
+input:required:invalid,
+input:focus:invalid {
+    border: 2px solid red; 
+    background-color: #ffe6e6; 
+}
+
+/* Estilos para campos de entrada válidos */
+input:required:valid {
+    border: 2px solid green; 
+    background-color: #e6ffe6; 
+}
+
+.management-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.management-links a {
+  text-decoration: underline;
+}
+
+#new-vehicule label {
+  font-size: 18px;
+  padding: 2px;
+}
+
+#btn-vehicule button{
+
+  margin-top: 10px;
+}
+
+#classificationList {
+  font-size: 18px;
+  padding: 4px;
+}
+
 @media only screen and (min-width: 768px) {
   body {
     background-size: 100px 100px;
