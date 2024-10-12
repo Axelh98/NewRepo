@@ -284,22 +284,22 @@ form {
   gap: 15px;
 }
 
-#new-vehicule {
+.new-vehicule {
   display: flex;
   flex-direction: column;
 }
 
-#new-vehicule label {
+.new-vehicule label {
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 0.2em;
 }
 
-#new-vehicule input {
+.new-vehicule input {
   width: 50%;
   height: 25px;
 }
-#new-vehicule p {
+.new-vehicule p {
   font-size: 22px;
   font-weight: bold;
 }
