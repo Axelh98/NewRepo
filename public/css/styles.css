@@ -268,6 +268,45 @@ nav li a {
   text-align: center;
 }
 
+
+
+form {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1em;
+  background-color: #01b0d3;
+}
+
+.body-login{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#new-vehicule {
+  display: flex;
+  flex-direction: column;
+}
+
+#new-vehicule label {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 0.2em;
+}
+
+#new-vehicule input {
+  width: 50%;
+  height: 25px;
+}
+#new-vehicule p {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+
+
+
 @media only screen and (min-width: 768px) {
   body {
     background-image: url(/images/site/checkerboard.jpg);
