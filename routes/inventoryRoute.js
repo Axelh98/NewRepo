@@ -11,6 +11,7 @@ router.get("/type/:classificationId", invController.buildByClassificationId);
 // route to vehicule detail
 router.get("/detail/:vehicleId", vehicleController.buildVehicleDetail);
 
+
 // error in the footter
 router.get('/cause-error', (req, res, next) => {
     const error = new Error('Error intencional generado');

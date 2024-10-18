@@ -20,9 +20,15 @@ validateInventory.newInventoryRules = () => {
       .notEmpty()
       .withMessage("Description is required."),
 
-    body("inv_image").isURL().withMessage("A valid image URL is required."),
+      body("inv_image")
+      .trim()
+      .matches(/^(\/|https?:\/\/)/) // Permite URLs relativas o absolutas
+      .withMessage("A valid image URL is required."),
 
-    body("inv_thumbnail").isURL().withMessage("A valid thumbnail URL is required."),
+      body("inv_thumbnail")
+      .trim()
+      .matches(/^(\/|https?:\/\/)/) // Permite URLs relativas o absolutas
+      .withMessage("A valid thumbnail URL is required."),
 
     body("inv_price")
       .isFloat({ min: 0 })
@@ -76,5 +82,49 @@ validateInventory.checkNewInventoryData = async (req, res, next) => {
   }
   next();
 };
+
+
+// New checkUpdateData function for updating inventory
+validateInventory.checkUpdateData = async (req, res, next) => {
+  const {
+    classification_id,
+    inv_make,
+    inv_model,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_year,
+    inv_miles,
+    inv_color,
+    inv_id // Added inv_id for the update process
+  } = req.body;
+  
+  let errors = validationResult(req);
+  
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    const classification = await utilities.buildClassificationList();
+    
+    return res.render("inventory/edit-inventory", {
+      errors: errors.array(),
+      title: "Edit Vehicle", // Updated title to reflect the edit view
+      nav,
+      classification_id: classification,
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_year,
+      inv_miles,
+      inv_color,
+      inv_id // Make sure the inv_id is returned to the view
+    });
+  }
+  next();
+};
+
 
 module.exports = validateInventory;

@@ -12,6 +12,11 @@ router.get("/new-classification", utilities.handleErrors(managementController.sh
 
 router.get("/new-inventory", utilities.handleErrors(managementController.showNewInventoryForm));
 
+router.get("/getInventory/:classification_id", utilities.handleErrors(managementController.getInventoryJSON))
+
+router.get("/edit/:inv_id", utilities.handleErrors(managementController.editInventoryView));
+
+
 // POST route to add new classification with validation
 router.post(
     "/new-classification", 
@@ -27,6 +32,7 @@ router.post(
     utilities.handleErrors(managementController.addNewInventory)
   );
 
+  router.post("/update/", utilities.handleErrors(managementController.updateInventory))
   
 
 module.exports = router;

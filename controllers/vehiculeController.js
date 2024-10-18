@@ -5,7 +5,6 @@ const vehdet = {}
 
 vehdet.buildVehicleDetail = async function (req, res, next) {
     const vehicleId = req.params.vehicleId
-    console.log("Vehicle ID:", vehicleId) // Imprime el ID para verificar
     const vehicle = await invModel.getVehicleDetail(vehicleId)
 
     if (!vehicle) {

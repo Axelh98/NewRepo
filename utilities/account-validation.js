@@ -61,14 +61,14 @@ validate.registrationRules = () => {
 validate.loginRules = () => {
     return [
       // valid email is required
-      body("email")
+      body("account_email")
         .trim()
         .isEmail()
         .normalizeEmail() // refer to validator.js docs
         .withMessage("A valid email is required."),
   
       // password is required
-      body("password")
+      body("account_password")
         .trim()
         .notEmpty()
         .withMessage("Password is required.")

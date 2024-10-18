@@ -15,9 +15,11 @@ const app = express();
 const baseController = require("./controllers/basecontroller");
 const inventoryRoute = require("./routes/inventoryRoute");
 const managementRoute = require("./routes/managementRoute");
+const accountRoutes = require('./routes/accountRoute');
 const static = require("./routes/static");
 const utilities = require("./utilities/");
 const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser");
 
 
 /* *********************** --frozen-lockfile
@@ -50,12 +52,17 @@ app.use(
   })
 );
 
+
+
 // Inicializa flash
 app.use(flash());
 
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+app.use(cookieParser());
+app.use(utilities.checkJWTToken)
 
 /* ***********************
  * Routes
@@ -75,7 +82,7 @@ app.get("/cause-error", (req, res, next) => {
 
 app.use("/inv", managementRoute);
 
-app.use("/account", require("./routes/accountRoute"));
+app.use("/account", accountRoutes);
 
 
 app.get("/", function (req, res) {
