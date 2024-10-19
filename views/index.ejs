@@ -1,5 +1,14 @@
+
 <h1 class="test">Welcome to CSE Motors!</h1>
-<%- messages() %>
+
+<% if (messages.length > 0) { %>
+  <div class="flash-messages">
+    <% messages.forEach(function(msg) { %>
+      <p><%= msg %></p>
+    <% }); %>
+  </div>
+<% } %>
+
 
 <section>
   <div class="carbackground">

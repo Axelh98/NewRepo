@@ -4,20 +4,34 @@ const inventoryModel = require("../models/inventory-model");
 const validateInventory = require("../utilities/inventory-validation");
 
 async function buildManagement(req, res, next) {
-  let nav = await utilities.getNav();
-  const classificationSelect = await utilities.buildClassificationList();
-  res.render("./inventory/management", {
-    title: "Vehicle Management",
-    nav,
-    classificationSelect,
-  });
+  try {
+    let nav = await utilities.getNav();
+    const classificationSelect = await utilities.buildClassificationList();
+    
+    const messages = {
+      success: req.flash('success'),
+      error: req.flash('error')
+    };
+
+    res.render("./inventory/management", {
+      title: "Vehicle Management",
+      nav,
+      classificationSelect,
+      user: req.user,
+      messages, 
+    });
+  } catch (error) {
+    next(error); 
+  }
 }
+
 
 async function showNewClassificationForm(req, res, next) {
   let nav = await utilities.getNav();
   res.render("./inventory/new-classification", {
     title: "Add New classification",
     nav,
+    user: req.user, 
     errors: [],
   });
 }
@@ -30,6 +44,7 @@ const showNewInventoryForm = async (req, res) => {
     nav,
     classification_id: classification_id,
     errors: req.flash("errors"),
+    user: req.user,
   });
 };
 
@@ -200,6 +215,56 @@ async function updateInventory(req, res, next) {
   }
 }
 
+// ***************************
+// Build and deliver the delete confirmation view
+// ***************************
+async function buildDeleteConfirmationView(req, res, next) {
+  const inv_id = parseInt(req.params.inv_id)
+  let nav = await utilities.getNav()
+  try {
+    const vehicleData = await inventoryModel.getInventoryById(inv_id)
+    const name = `${vehicleData.inv_make} ${vehicleData.inv_model}`
+    
+    // Pasar el objeto `vehicle` a la vista
+    res.render("inventory/delete-confirm", {
+      title: `Delete ${name}`,
+      nav,
+      errors: null,
+      vehicle: vehicleData, 
+      user: req.user
+    })
+  } catch (error) {
+    console.error("Error building delete confirmation view:", error)
+    next(error)
+  }
+}
+
+
+// ***************************
+// Process the delete of the vehicle
+// ***************************
+async function deleteVehicle(req, res, next) {
+  const inv_id = parseInt(req.body.inv_id) 
+  let nav = await utilities.getNav()
+  try {
+    const deleteResult = await inventoryModel.deleteInventoryById(inv_id) 
+    if (deleteResult) {
+      req.flash("success", "Vehicle successfully deleted.")
+      res.redirect("/inv") 
+    } else {
+      req.flash("error", "Failed to delete the vehicle.")
+      res.redirect(`/inv/delete/${inv_id}`)
+    }
+  } catch (error) {
+    console.error("Error deleting vehicle:", error)
+    req.flash("error", "Error deleting the vehicle.")
+    res.redirect(`/inv/delete/${inv_id}`)
+  }
+}
+
+
+
+
 module.exports = {
   buildManagement,
   showNewClassificationForm,
@@ -208,5 +273,7 @@ module.exports = {
   addNewInventory,
   getInventoryJSON,
   editInventoryView,
-  updateInventory
+  updateInventory,
+  buildDeleteConfirmationView,
+  deleteVehicle
 };

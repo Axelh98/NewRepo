@@ -2,6 +2,7 @@
  * This server.js file is the primary file of the
  * application. It is used to control the project.
  *******************************************/
+
 /* ***********************
  * Require Statements
  *************************/
@@ -18,51 +19,46 @@ const managementRoute = require("./routes/managementRoute");
 const accountRoutes = require('./routes/accountRoute');
 const static = require("./routes/static");
 const utilities = require("./utilities/");
-const bodyParser = require("body-parser")
+const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const passport = require("passport");
 
 
-/* *********************** --frozen-lockfile
+
+/* ***********************
  * View Engine and templates
  *************************/
 app.set("view engine", "ejs");
 app.use(expressLayouts);
 app.set("layout", "./layouts/layout"); // not at views root
 
-// Express Messages Middleware
-app.use(require("connect-flash")());
-app.use(function (req, res, next) {
-  res.locals.messages = require("express-messages")(req, res);
+
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // Cambia a true si usas HTTPS
+}));
+
+app.use(passport.initialize());
+app.use(passport.session()); 
+
+
+app.use((req, res, next) => {
+  res.locals.user = req.user; 
+  res.locals.loggedin = req.isAuthenticated ? req.isAuthenticated() && req.user : false; 
   next();
 });
 
-/* ***********************
- * Middleware
- * ************************/
-app.use(
-  session({
-    store: new (require("connect-pg-simple")(session))({
-      createTableIfMissing: true,
-      pool,
-    }),
-    secret: process.env.SESSION_SECRET,
-    resave: true,
-    saveUninitialized: true,
-    name: "sessionId",
-  })
-);
+
+app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.json());
 
 
-
-// Inicializa flash
 app.use(flash());
-
-
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-
 app.use(cookieParser());
-app.use(utilities.checkJWTToken)
+app.use(utilities.checkJWTToken);
+
 
 /* ***********************
  * Routes
@@ -71,6 +67,9 @@ app.use(static);
 // Index route
 app.get("/", utilities.handleErrors(baseController.buildHome));
 app.use("/inv", inventoryRoute);
+app.use("/inv", managementRoute);
+app.use("/account", accountRoutes);
+
 // Ruta para provocar el error 500 intencionalmente
 app.get("/cause-error", (req, res, next) => {
   try {
@@ -78,23 +77,6 @@ app.get("/cause-error", (req, res, next) => {
   } catch (err) {
     next(err); // Pasa el error al middleware
   }
-});
-
-app.use("/inv", managementRoute);
-
-app.use("/account", accountRoutes);
-
-
-app.get("/", function (req, res) {
-  res.render("index", { title: "home" });
-});
-
-app.get('/inv', (req, res) => {
-  const messages = {
-    success: req.flash('success'),
-    error: req.flash('error'),
-  };
-  res.render('inventory', { messages });
 });
 
 // Middleware de manejo de errores
@@ -116,27 +98,11 @@ const port = process.env.PORT;
 const host = process.env.HOST;
 
 /* ***********************
- * Express Error Handler
- * Place after all other middleware
- *************************/
-app.use(async (err, req, res, next) => {
-  let nav = await utilities.getNav();
-  console.error(`Error at: "${req.originalUrl}": ${err.message}`);
-  if (err.status == 404) {
-    message = err.message;
-  } else {
-    message = "Oh no! There was a crash. Maybe try a different route?";
-  }
-  res.render("errors/error", {
-    title: err.status || "Server Error",
-    message,
-    nav,
-  });
-});
-
-/* ***********************
  * Log statement to confirm server operation
  *************************/
 app.listen(port, () => {
-  console.log(`app listening on ${host}:${port}`);
+  console.log(`App listening on ${host}:${port}`);
 });
+
+
+module.exports = app;

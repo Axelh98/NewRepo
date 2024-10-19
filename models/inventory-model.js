@@ -55,6 +55,20 @@ async function checkExistingClassification(classificationName) {
   }
 }
 
+async function getInventoryById(inv_id) {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM public.inventory WHERE inv_id = $1',
+      [inv_id]
+    )
+    return result.rows[0] // Devolver solo el primer resultado
+  } catch (error) {
+    console.error("Error in getInventoryById:", error)
+    throw error
+  }
+}
+
+
 /* ***************************
  *  Add a new vehicle to the inventory
  * ************************** */
@@ -123,6 +137,18 @@ async function updateInventory(
   }
 }
 
+/* ***************************
+ *  Delete Inventory Item
+ * ************************** */
+async function deleteInventoryById(inv_id) {
+  try {
+    const sql = 'DELETE FROM inventory WHERE inv_id = $1';
+    const result = await pool.query(sql, [inv_id]);
+    return result.rowCount > 0; 
+  } catch (error) {
+    throw new Error("Delete Inventory Error");
+  }
+}
 
 
-module.exports = {getClassifications, getInventoryByClassificationId, getVehicleDetail, checkExistingClassification, addVehicle, updateInventory};
+module.exports = {getClassifications, getInventoryByClassificationId, getVehicleDetail, checkExistingClassification, addVehicle, updateInventory, deleteInventoryById, getInventoryById};

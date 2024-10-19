@@ -4,17 +4,21 @@ const utilities = require("../utilities")
 const validation = require("../utilities/classificationValidation");
 const inventoryValidation = require("../utilities/inventory-validation")
 const managementController = require("../controllers/managmentController")
+const checkAccountType = require("../middleware/authMiddleware"); 
+
+router.get("/", utilities.handleErrors(managementController.buildManagement));
+
+router.get("/new-classification", utilities.checkLogin, checkAccountType, utilities.handleErrors(managementController.showNewClassificationForm));
+
+router.get("/new-inventory", utilities.checkLogin, checkAccountType, utilities.handleErrors(managementController.showNewInventoryForm));
+
+router.get("/getInventory/:classification_id", utilities.checkLogin, checkAccountType, utilities.handleErrors(managementController.getInventoryJSON));
+
+router.get("/edit/:inv_id", utilities.checkLogin, checkAccountType, utilities.handleErrors(managementController.editInventoryView));
+
+router.get("/delete/:inv_id", utilities.checkLogin, checkAccountType, utilities.handleErrors(managementController.buildDeleteConfirmationView));
 
 
-router.get("/", utilities.handleErrors(managementController.buildManagement))
-
-router.get("/new-classification", utilities.handleErrors(managementController.showNewClassificationForm));
-
-router.get("/new-inventory", utilities.handleErrors(managementController.showNewInventoryForm));
-
-router.get("/getInventory/:classification_id", utilities.handleErrors(managementController.getInventoryJSON))
-
-router.get("/edit/:inv_id", utilities.handleErrors(managementController.editInventoryView));
 
 
 // POST route to add new classification with validation
@@ -33,6 +37,8 @@ router.post(
   );
 
   router.post("/update/", utilities.handleErrors(managementController.updateInventory))
-  
+
+  router.post("/delete", utilities.checkLogin, utilities.handleErrors(managementController.deleteVehicle));
+
 
 module.exports = router;

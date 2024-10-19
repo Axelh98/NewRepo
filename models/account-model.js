@@ -30,14 +30,19 @@ async function checkExistingEmail(account_email){
  * Verify login credentials
  * ********************* */
 async function verifyLogin(email, password) {
-    try {
-      const sql = "SELECT * FROM account WHERE account_email = $1 AND account_password = $2";
-      const result = await pool.query(sql, [email, password]);
-      return result.rowCount > 0;
-    } catch (error) {
-      return error.message;
-    }
+  try {
+      const accountData = await getAccountByEmail(email);
+      if (!accountData) {
+          return false; // Si no hay un usuario con ese email
+      }
+      // Comparar la contraseña proporcionada con la hash almacenada
+      const isMatch = await bcrypt.compare(password, accountData.account_password);
+      return isMatch;
+  } catch (error) {
+      return false;
   }
+}
+
 
   /* *****************************
 * Return account data using email address
@@ -53,7 +58,19 @@ async function getAccountByEmail (account_email) {
   }
 }
 
+async function getAccountById(id) {
+  const query = 'SELECT * FROM account WHERE account_id = $1'; // Cambia el nombre de la tabla y la columna según tu esquema
+  const values = [id];
+  
+  try {
+      const res = await pool.query(query, values);
+      return res.rows[0]; // Retorna el primer registro encontrado
+  } catch (error) {
+      throw new Error('Error fetching account: ' + error.message);
+  }
+}
 
 
 
-  module.exports = { registerAccount , checkExistingEmail , verifyLogin, getAccountByEmail}
+
+  module.exports = { registerAccount , checkExistingEmail , verifyLogin, getAccountByEmail, getAccountById}

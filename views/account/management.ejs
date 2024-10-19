@@ -1,24 +1,35 @@
 <h1>Account Management</h1>
 
-  <!-- Mostrar mensajes de éxito o error -->
-  <% if (messages.success) { %>
-    <div class="alert alert-success"><%= messages.success %></div>
-  <% } %>
-  
-  <% if (messages.error) { %>
-    <div class="alert alert-danger"><%= messages.error %></div>
-  <% } %>
+<!-- Mostrar mensajes de éxito o error -->
+<% if (messages.success) { %>
+  <div class="alert alert-success"><%= messages.success %></div>
+<% } %>
 
-  <!-- Mostrar errores de validación -->
-  <% if (errors && errors.length > 0) { %>
-    <div class="error-messages">
-      <ul>
-        <% errors.forEach(function(error) { %>
-          <li><%= error.msg %></li>
-        <% }) %>
-      </ul>
-    </div>
-  <% } %>
+<% if (messages.error) { %>
+  <div class="alert alert-danger"><%= messages.error %></div>
+<% } %>
 
-  <!-- Contenido de la página -->
-  <p>You're logged in.</p>
+<!-- Mostrar errores de validación -->
+<% if (errors && errors.length > 0) { %>
+  <div class="error-messages">
+    <ul>
+      <% errors.forEach(function(error) { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+
+<!-- Contenido de la página -->
+
+<h2>Welcome <%= firstName %></h2>
+<p>Account Type: <%= accountType %></p>
+<% if (accountType === 'Employee' || accountType === 'Admin') { %>
+
+  <h3>Inventory Management</h3>
+  <p><a href="/inv">Access Inventory Management</a></p>
+<% } %>
+
+<p><a href="/update-account/<%= user.account_id %>">Update Account Information</a></p>
+
+
