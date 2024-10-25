@@ -119,6 +119,12 @@ nav li a {
   font-size: 30px;
 }
 
+#tools {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
 #tools a {
   font-size: 15px;
 }

@@ -5,12 +5,13 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 async function buildLogin(req, res, next) {
-  
+  const messages = req.flash("notice");
   let nav = await utilities.getNav();
   res.render("account/login", {
     title: "Login",
     nav,
     errors: null,
+    messages
   });
 }
 
@@ -57,6 +58,7 @@ async function registerAccount(req, res) {
     res.status(201).render("account/login", {
       title: "Login",
       nav,
+      errors: null,
     });
   } else {
     req.flash("notice", "Sorry, the registration failed.");
