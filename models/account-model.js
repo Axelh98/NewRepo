@@ -71,6 +71,53 @@ async function getAccountById(id) {
 }
 
 
+const updateAccount = async (account_id, account_firstname, account_lastname, account_email) => {
+  try {
+      const query = `
+          UPDATE account 
+          SET account_firstname = $1, account_lastname = $2, account_email = $3 
+          WHERE account_id = $4
+      `;
+      const values = [account_firstname, account_lastname, account_email, parseInt(account_id)];
+      const result = await pool.query(query, values);
+
+      return result.rowCount; // Verifica si se actualizó alguna fila
+  } catch (error) {
+      console.error('Error al actualizar la cuenta:', error);
+      throw error;
+  }
+};
 
 
-  module.exports = { registerAccount , checkExistingEmail , verifyLogin, getAccountByEmail, getAccountById}
+
+
+async function changePassword(accountId, newPassword) {
+  try {
+      // Actualiza la contraseña en la base de datos
+      const result = await pool.query(
+          `UPDATE account SET account_password = $1 WHERE account_id = $2`,
+          [newPassword, accountId]
+      );
+
+      return result.rowCount > 0; // Devuelve true si la actualización fue exitosa
+  } catch (error) {
+      console.error("Error cambiando la contraseña:", error);
+      throw error; // Propaga el error para manejarlo en el controlador
+  }
+}
+
+
+async function getAllAccounts() {
+  try {
+      const sql = 'SELECT account_id, account_firstname, account_lastname, account_email, account_type FROM account';
+      const result = await pool.query(sql);
+      return result.rows; // Devuelve todas las filas encontradas
+  } catch (error) {
+      console.error('Error al obtener la lista de cuentas:', error);
+      throw error; // Propaga el error para manejarlo en el controlador
+  }
+}
+
+
+
+  module.exports = { registerAccount , checkExistingEmail , verifyLogin, getAccountByEmail, getAccountById, updateAccount, changePassword, getAllAccounts}

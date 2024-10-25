@@ -3,7 +3,7 @@ const express = require("express")
 const router = new express.Router() 
 const invController = require("../controllers/invController")
 const vehicleController = require("../controllers/vehiculeController")
-const managementController = require('../controllers/managmentController');
+const managmentController = require("../controllers/managmentController")
 const utilities = require("../utilities")
 
 // Route to build inventory by classification view
@@ -11,6 +11,7 @@ router.get("/type/:classificationId", invController.buildByClassificationId);
 // route to vehicule detail
 router.get("/detail/:vehicleId", vehicleController.buildVehicleDetail);
 
+router.get("/dashboard", utilities.handleErrors(managmentController.buildDashboard))
 
 // error in the footter
 router.get('/cause-error', (req, res, next) => {

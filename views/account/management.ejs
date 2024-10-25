@@ -1,4 +1,7 @@
-<h1>Account Management</h1>
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } else { res.redirect('/') } %>
+
 
 <!-- Mostrar mensajes de éxito o error -->
 <% if (messages.success) { %>
@@ -22,14 +25,42 @@
 
 <!-- Contenido de la página -->
 
-<h2>Welcome <%= firstName %></h2>
-<p>Account Type: <%= accountType %></p>
-<% if (accountType === 'Employee' || accountType === 'Admin') { %>
+<h2>Welcome <%= locals.accountData.account_firstname %></h2>
+<p>Account Type: <%= locals.accountData.account_type %></p>
+<% if (locals.accountData.account_type === 'Employee' || locals.accountData.account_type === 'Admin') { %>
 
   <h3>Inventory Management</h3>
   <p><a href="/inv">Access Inventory Management</a></p>
 <% } %>
 
-<p><a href="/update-account/<%= user.account_id %>">Update Account Information</a></p>
+<p><a href="/account/update-account/<%= locals.accountData.account_id %>">Update Account Information</a></p>
+
+<% if (locals.accountData.account_type === 'Admin') { %>
+
+  <h3>User Lists</h3>
+  <table>
+      <thead>
+          <tr>
+              <th>ID</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email</th>
+              <th>Account Type</th>
+          </tr>
+      </thead>
+      <tbody>
+          <% accounts.forEach(account => { %>
+              <tr>
+                  <td><%= account.account_id %></td>
+                  <td><%= account.account_firstname %></td>
+                  <td><%= account.account_lastname %></td>
+                  <td><%= account.account_email %></td>
+                  <td><%= account.account_type %></td>
+              </tr>
+          <% }); %>
+      </tbody>
+  </table>
 
 
+
+<% } %>

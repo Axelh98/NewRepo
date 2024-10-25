@@ -6,7 +6,7 @@ const inventoryValidation = require("../utilities/inventory-validation")
 const managementController = require("../controllers/managmentController")
 const checkAccountType = require("../middleware/authMiddleware"); 
 
-router.get("/", utilities.handleErrors(managementController.buildManagement));
+router.get("/", checkAccountType, utilities.handleErrors(managementController.buildManagement));
 
 router.get("/new-classification", utilities.checkLogin, checkAccountType, utilities.handleErrors(managementController.showNewClassificationForm));
 

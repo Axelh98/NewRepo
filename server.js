@@ -1,108 +1,118 @@
 /* ******************************************
- * This server.js file is the primary file of the
+ * This server.js file is the primary file of the 
  * application. It is used to control the project.
  *******************************************/
-
 /* ***********************
  * Require Statements
  *************************/
-const express = require("express");
-const expressLayouts = require("express-ejs-layouts");
-const session = require("express-session");
-const flash = require("connect-flash");
-const pool = require("./database/");
-const env = require("dotenv").config();
-const app = express();
-const baseController = require("./controllers/basecontroller");
-const inventoryRoute = require("./routes/inventoryRoute");
+const express = require("express")
+const expressLayouts = require("express-ejs-layouts")
+const env = require("dotenv").config()
+const app = express()
+const static = require("./routes/static")
+const baseController = require("./controllers/baseController")
+const inventoryRoute = require("./routes/inventoryRoute")
+const accountRoute = require("./routes/accountRoute")
 const managementRoute = require("./routes/managementRoute");
-const accountRoutes = require('./routes/accountRoute');
-const static = require("./routes/static");
-const utilities = require("./utilities/");
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-const passport = require("passport");
-
-
+const utilities = require("./utilities/")
+const session = require("express-session")
+const pool = require('./database/')
+const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser")
 
 /* ***********************
- * View Engine and templates
- *************************/
-app.set("view engine", "ejs");
-app.use(expressLayouts);
-app.set("layout", "./layouts/layout"); // not at views root
-
-
+ * Middleware
+ * ************************/
 app.use(session({
+  store: new (require('connect-pg-simple')(session))({
+    createTableIfMissing: true,
+    pool,
+  }),
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false } // Cambia a true si usas HTTPS
-}));
+  saveUninitialized: false,
+  name: 'sessionId',
+}))
 
-app.use(passport.initialize());
-app.use(passport.session()); 
+// Express Messages Middleware
+app.use(require('connect-flash')())
+app.use(function (req, res, next) {
+  res.locals.messages = require('express-messages')(req, res)
+  next()
+})
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-app.use((req, res, next) => {
-  res.locals.user = req.user; 
-  res.locals.loggedin = req.isAuthenticated ? req.isAuthenticated() && req.user : false; 
-  next();
-});
+app.use(cookieParser())
+app.use(utilities.checkJWTToken)
 
-
-app.use(bodyParser.urlencoded({ extended: true })); 
-app.use(bodyParser.json());
-
-
-app.use(flash());
-app.use(cookieParser());
-app.use(utilities.checkJWTToken);
-
+/* ***********************
+ * View Engine and Templates
+ *************************/
+app.set("view engine", "ejs")
+app.use(expressLayouts)
+app.set("layout", "./layouts/layout") // not at views root
 
 /* ***********************
  * Routes
  *************************/
-app.use(static);
-// Index route
-app.get("/", utilities.handleErrors(baseController.buildHome));
-app.use("/inv", inventoryRoute);
-app.use("/inv", managementRoute);
-app.use("/account", accountRoutes);
+app.use(static)
 
-// Ruta para provocar el error 500 intencionalmente
-app.get("/cause-error", (req, res, next) => {
-  try {
-    throw new Error("Este es un error 500 intencional"); // Genera el error
-  } catch (err) {
-    next(err); // Pasa el error al middleware
-  }
+// Index route
+app.get("/", utilities.handleErrors(baseController.buildHome))
+
+// Inventory routes
+app.use("/inv", inventoryRoute)
+
+// Management Routes
+app.use("/inv", managementRoute);
+
+// Account routes
+app.use("/account", accountRoute)
+
+
+// Middleware para manejar rutas no encontradas
+app.use((req, res, next) => {
+  const error = new Error('Oh no! There was a crash. Maybe try a different route?');
+  error.status = 404; // Establecer el estado del error a 404
+  next(error); // Pasar el error al siguiente middleware de error
 });
 
-// Middleware de manejo de errores
-app.use((err, req, res, next) => {
-  console.error(err.stack); // Muestra el error en la consola
-  const status = err.status || 500; // Obtiene el código de estado
-  res.status(status).render("error", {
-    title: "Server Error",
-    message: err.message,
-    status: status,
+/* ***********************
+* Express Error Handler
+* Colocar después de todos los otros middleware
+*************************/
+app.use(async (err, req, res, next) => {
+  let nav = await utilities.getNav();
+  console.error(`Error at: "${req.originalUrl}": ${err.message}`);
+  
+  // Manejo del mensaje según el tipo de error
+  let message;
+  if (err.status === 404) {
+    message = err.message; // Mensaje para 404
+  } else {
+    message = "Sorry, an unexpected problem occurred. Please try again later or contact support"
+  }
+
+  res.render("errors/error", {
+    title: err.status || "Server Error", // Título de la vista
+    message,
+    nav,
   });
 });
+
 
 /* ***********************
  * Local Server Information
  * Values from .env (environment) file
  *************************/
-const port = process.env.PORT;
-const host = process.env.HOST;
+const port = process.env.PORT
+const host = process.env.HOST
 
 /* ***********************
  * Log statement to confirm server operation
  *************************/
 app.listen(port, () => {
-  console.log(`App listening on ${host}:${port}`);
-});
-
-
-module.exports = app;
+  console.log(`app listening on ${host}:${port}`)
+})

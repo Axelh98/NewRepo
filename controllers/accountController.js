@@ -1,8 +1,8 @@
 const utilities = require("../utilities");
 const accountModel = require("../models/account-model");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const bcrypt = require("bcryptjs");
 
 async function buildLogin(req, res, next) {
   let nav = await utilities.getNav();
@@ -25,30 +25,6 @@ async function buildRegister(req, res, next) {
   });
 }
 
-/* ****************************************
-*  Process Login
-* *************************************** 
-async function loginAccount(req, res) {
-    let nav = await utilities.getNav();
-    const { email, password } = req.body;
-  
-    const loginResult = await accountModel.verifyLogin(email, password);
-  
-    if (loginResult) {
-      req.flash("notice", `Welcome back!`);
-      res.redirect("/dashboard"); 
-    } else {
-      req.flash("notice", "Invalid email or password.");
-      res.status(401).render("account/login", {
-        title: "Login",
-        nav,
-        errors: [{ msg: "Invalid email or password." }],
-        email,
-      });
-    }
-  }
-
-*/
 
 /* ****************************************
  *  Process Registration
@@ -112,14 +88,23 @@ async function accountLogin(req, res) {
       console.log("Password provided: ", account_password);
 
       if (await bcrypt.compare(account_password, accountData.account_password)) {
-          delete accountData.account_password;
-          const token = jwt.sign({ id: accountData.account_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-          req.session.user = { ...accountData, token }; // Guardar en sesión
-          console.log("Login successful, redirecting to account management...");
-          return res.redirect("/account/management");
-      } else {
-          console.log("Password mismatch");
-      }
+        delete accountData.account_password
+        const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 })
+        if (process.env.NODE_ENV === 'development') {
+            res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
+        } else {
+            res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
+        }
+        return res.redirect("/account/management")
+    } else {
+        req.flash("notice", "The credentials you entered were invalid.")
+        res.status(401).render("account/login", {
+            title: "Login",
+            nav,
+            errors: null,
+            account_email
+        })
+    }
   } catch (error) {
       console.error("Error during login process:", error);
       req.flash("notice", "An unexpected error occurred during login.");
@@ -149,7 +134,7 @@ function verifyToken(req, res, next) {
       return res.redirect("/account/login?message=Debes iniciar sesión");
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
       if (err) {
           console.error("Token inválido:", err);
           return res.redirect("/account/login?message=Token inválido");
@@ -164,24 +149,15 @@ function verifyToken(req, res, next) {
 async function accountManagement(req, res) {
   let nav = await utilities.getNav();
   try {
-      console.log("Entering accountManagement...");
-      console.log("Session user: ", req.user);
 
-      if (!req.user) {
-          return res.redirect("/account/login?message=Debes iniciar sesión");
-      }
-
-      const firstName = req.user.account_firstname || "Usuario";
-      const accountType = req.user.account_type;
-
+    const accounts = await accountModel.getAllAccounts();
       res.render("account/management", {
-          user: req.user,
+          // user: req.user,
           nav,
           title: "Account Management",
-          firstName,
-          accountType,
           messages: req.flash("messages") || {},
           errors: req.flash("errors") || [],
+          accounts
       });
       
   } catch (error) {
@@ -192,6 +168,78 @@ async function accountManagement(req, res) {
   }
 }
 
+async function buildUpdate(req, res) {
+  let nav = await utilities.getNav();
+  const accountId = req.params.id; 
+  const accountData = await accountModel.getAccountById(accountId); 
+
+  if (!accountData) {
+    return res.status(404).render("error", {
+      message: "Account not found.",
+    });
+  }
+
+  try {
+    res.render("account/update-account", {
+      nav,
+      accountData,
+      title: "Update Account",
+      messages: req.flash("messages") || {},
+      errors: req.flash("errors") || [],
+    });
+  } catch (error) {
+    console.error("Error en update account:", error);
+    return res.status(500).render("error", {
+      message: "Hubo un problema al cargar la vista de actualización de cuenta.",
+    });
+  }
+}
+
+
+const updateAccount = async (req, res) => {
+  try {
+      console.log(req.body); // Esto mostrará los datos recibidos en la consola
+      
+      const { account_firstname, account_lastname, account_email, account_id } = req.body;
+      
+      // Verificar si alguno de los campos requeridos está vacío
+      if (!account_firstname || !account_lastname || !account_email || !account_id) {
+          return res.status(400).send('Faltan valores obligatorios.');
+      }
+
+      // Lógica de actualización de la cuenta
+      const result = await accountModel.updateAccount(account_id, account_firstname, account_lastname, account_email);
+
+      if (result) {
+          res.redirect('/account/management');
+      } else {
+          res.status(400).send('No se pudo actualizar la cuenta.');
+      }
+  } catch (error) {
+      console.error('Error al actualizar la cuenta:', error);
+      res.status(500).send('Error interno del servidor.');
+  }
+};
+
+
+// También debes implementar la función para cambiar la contraseña
+async function changePassword(req, res) {
+  const { account_id, account_password } = req.body;
+  const hashedPassword = await bcrypt.hash(account_password, 10);
+
+  // Lógica para cambiar la contraseña en la base de datos
+  const changeResult = await accountModel.changePassword(account_id, hashedPassword);
+
+  if (changeResult) {
+    req.flash("messages", { success: "Password changed successfully!" });
+    return res.redirect("/account/management");
+  } else {
+    req.flash("messages", { error: "Failed to change password." });
+    return res.redirect(`/account/update/${account_id}`);
+  }
+}
+
+
 
 
 
@@ -201,5 +249,8 @@ module.exports = {
   registerAccount,
   accountLogin,
   accountManagement,
-  verifyToken
+  verifyToken,
+  buildUpdate,
+  updateAccount,
+  changePassword
 };

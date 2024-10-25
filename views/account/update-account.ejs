@@ -1,0 +1,48 @@
+<% if (title) { %>
+    <h1><%= title %></h1>
+  <% } else { res.redirect('/') } %>
+  
+  <!-- Mostrar mensajes de éxito o error -->
+  <% if (messages.success) { %>
+    <div class="alert alert-success"><%= messages.success %></div>
+  <% } %>
+  
+  <% if (messages.error) { %>
+    <div class="alert alert-danger"><%= messages.error %></div>
+  <% } %>
+  
+  <!-- Mostrar errores de validación -->
+  <% if (errors && errors.length > 0) { %>
+    <div class="error-messages">
+      <ul>
+        <% errors.forEach(function(error) { %>
+          <li><%= error.msg %></li>
+        <% }) %>
+      </ul>
+    </div>
+  <% } %>
+  
+  <!-- Formulario de actualización de cuenta -->
+  <form action="/account/update-account" method="POST">
+    <input type="number" name="account_id" value="<%= locals.accountData.account_id %>" hidden required>
+    <input type="text" name="account_firstname" value="<%= locals.accountData.account_firstname %>" required>
+    <input type="text" name="account_lastname" value="<%= locals.accountData.account_lastname %>" required>
+    <input type="email" name="account_email" value="<%= locals.accountData.account_email %>" required>
+
+    <button type="submit">Update Account</button>
+  </form>
+  
+  <!-- Formulario para cambiar la contraseña -->
+  <h2>Change Password</h2>
+  <form action="/account/change-password" method="POST">
+    <input type="hidden" name="account_id" value="<%= locals.account_id %>">
+  
+    <div>
+      <label for="password">New Password:</label>
+      <input type="password" id="password" name="account_password" required>
+      <p>Password must be at least 8 characters long and contain letters and numbers.</p>
+    </div>
+  
+    <button type="submit">Change Password</button>
+  </form>
+  

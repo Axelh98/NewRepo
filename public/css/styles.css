@@ -17,14 +17,14 @@ body {
 
 input:required:invalid,
 input:focus:invalid {
-    border: 2px solid red; 
-    background-color: #ffe6e6; 
+  border: 2px solid red;
+  background-color: #ffe6e6;
 }
 
 /* Estilos para campos de entrada válidos */
 input:required:valid {
-    border: 2px solid green; 
-    background-color: #e6ffe6; 
+  border: 2px solid green;
+  background-color: #e6ffe6;
 }
 
 .management-links {
@@ -41,8 +41,7 @@ input:required:valid {
   padding: 2px;
 }
 
-#btn-vehicule button{
-
+#btn-vehicule button {
   margin-top: 10px;
 }
 
@@ -113,7 +112,7 @@ nav ul {
 
 nav li a {
   color: white;
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .logo {
@@ -257,7 +256,6 @@ nav li a {
   font-weight: bold;
 }
 
-
 #pswdbtn {
   border: 2px solid #000;
   border-radius: 5px;
@@ -268,8 +266,6 @@ nav li a {
   text-align: center;
 }
 
-
-
 form {
   width: 90%;
   margin-left: auto;
@@ -278,7 +274,7 @@ form {
   background-color: #01b0d3;
 }
 
-.body-login{
+.body-login {
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -302,6 +298,63 @@ form {
 .new-vehicule p {
   font-size: 22px;
   font-weight: bold;
+}
+
+.cards {
+  display: flex;
+  margin-bottom: 40px;
+}
+.card {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  flex: 1;
+  margin: 0 5px;
+}
+.card h5 {
+  margin-bottom: 10px;
+}
+.card p {
+  font-weight: bold;
+}
+
+
+/* T A B L E ! ! ! */
+.table-responsive {
+  overflow-x: auto; /* Permite el desplazamiento horizontal */
+  margin: 20px 0;
+}
+
+/* Estilo general para la tabla */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem; /* Tamaño de fuente más pequeño en móviles */
+}
+.error-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+/* Estilo para los encabezados de la tabla */
+thead th {
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 10px;
+  text-align: left;
+}
+
+/* Estilo para las celdas de la tabla */
+tbody td {
+  border: 1px solid #dddddd;
+  padding: 10px;
+}
+
+/* Estilo para las filas de la tabla al pasar el mouse */
+tbody tr:hover {
+  background-color: #f2f2f2;
 }
 
 
@@ -335,6 +388,12 @@ form {
     text-decoration: none;
     color: black;
   }
+
+  nav li a {
+    color: white;
+    font-size: 18px;
+  }
+  
 
   .logo {
     font-size: 40px;
@@ -492,7 +551,6 @@ form {
   /* - - - LOGIN  */
   /* - - - LOGIN  */
 
- 
   form {
     width: 50%;
     margin-left: auto;
@@ -529,9 +587,57 @@ form {
     width: 100px;
     padding: 0.3em;
   }
-  .sign-up p{
+  .sign-up p {
     font-size: 22px;
     font-weight: bold;
     text-align: center;
+  }
+
+  /* GRAPHS ! ! ! !*/
+  .dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .cards {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+  }
+  .card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex: 1;
+    margin: 0 10px;
+  }
+  .card h5 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  .card p {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  .charts {
+    display: flex;
+    justify-content: space-between;
+  }
+  .chart-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    margin: 0 10px;
+  }
+  .chart-container canvas {
+    width: 90%;
   }
 }

@@ -150,5 +150,41 @@ async function deleteInventoryById(inv_id) {
   }
 }
 
+async function getVehicleCountByClassification() {
+  try {
+    const query = `
+      SELECT c.classification_name, COUNT(i.inv_id) as vehicle_count
+      FROM public.inventory i
+      JOIN public.classification c ON i.classification_id = c.classification_id
+      GROUP BY c.classification_name
+      ORDER BY vehicle_count DESC
+    `;
+    const result = await pool.query(query);
+    return result.rows; // Devuelve los datos para el gráfico
+  } catch (error) {
+    console.error("Error fetching vehicle count by classification:", error);
+    throw error;
+  }
+}
 
-module.exports = {getClassifications, getInventoryByClassificationId, getVehicleDetail, checkExistingClassification, addVehicle, updateInventory, deleteInventoryById, getInventoryById};
+/* ***************************
+ *  Get miles and prices of all vehicles
+ * ************************** */
+async function getMilesAndPrices() {
+  try {
+    const query = `
+      SELECT inv_miles, inv_price
+      FROM public.inventory
+      WHERE inv_miles IS NOT NULL AND inv_price IS NOT NULL
+    `;
+    const result = await pool.query(query);
+    return result.rows; // Devuelve los datos para el scatterplot
+  } catch (error) {
+    console.error("Error fetching miles and prices:", error);
+    throw error;
+  }
+}
+
+
+
+module.exports = {getClassifications, getInventoryByClassificationId, getVehicleDetail, checkExistingClassification, addVehicle, updateInventory, deleteInventoryById, getInventoryById, getVehicleCountByClassification, getMilesAndPrices};

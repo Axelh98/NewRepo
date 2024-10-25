@@ -122,3 +122,5 @@ validate.checkLoginData = async (req, res, next) => {
 
 
 module.exports = validate;
+
+

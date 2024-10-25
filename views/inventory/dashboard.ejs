@@ -1,0 +1,190 @@
+<% if (title) { %>
+    <h1><%= title %></h1>
+<% } else { %>
+    <script>window.location.href = '/';</script>
+<% } %>
+
+<% if (messages) { %>
+    <% if (messages.success && messages.success.length) { %>
+        <div class="alert alert-success">
+            <%= messages.success %>
+        </div>
+    <% } %>
+    <% if (messages.error && messages.error.length) { %>
+        <div class="alert alert-danger">
+            <%= messages.error %>
+        </div>
+    <% } %>
+<% } %>
+
+<div class="dashboard-container">
+
+    <!-- Cards Section -->
+    <div class="cards">
+        <div class="card">
+            <h5>Total Vehicles</h5>
+            <p id="totalVehicles"><%- totalVehicles %></p>
+        </div>
+        <div class="card">
+            <h5>Categories</h5>
+            <p id="categories"><%- totalClassifications %></p></p> <!-- Cambiado el ID -->
+        </div>
+        <div class="card">
+            <h5>Sales This Month</h5>
+            <p id="salesMonth">25</p>
+        </div>
+        <div class="card">
+            <h5>Revenue</h5>
+            <p id="revenue">$120,000</p>
+        </div>
+
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts">
+        <div class="chart-container">
+            <h5 class="text-center">Vehicle Sales by Month</h5>
+            <canvas id="salesChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h5 class="text-center">Vehicle Inventory Distribution</h5>
+            <canvas id="vehicleChart"></canvas>
+        </div>
+    </div>
+    <div class="charts">
+        <div class="chart-container">
+            <h5 class="text-center">Price per mile comparison</h5>
+            <canvas id="scatterChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        const salesCtx = document.getElementById('salesChart').getContext('2d');
+        const salesChart = new Chart(salesCtx, {
+            type: 'bar', 
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'], 
+                datasets: [{
+                    label: 'Sales',
+                    data: [30, 50, 45, 60, 70, 80, 100], 
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                    borderColor: 'rgba(75, 192, 192, 1)', 
+                    borderWidth: 1 
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true 
+                    }
+                },
+                plugins: {
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'end',
+                        color: '#333', 
+                        formatter: (value) => {
+                            return value; 
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels] /
+        });
+
+        
+        const vehicleCounts = <%- vehicleCounts ? JSON.stringify(vehicleCounts) : '[]' %>;
+
+       
+        const vehicleChart = document.getElementById('vehicleChart').getContext('2d');
+        const labels = vehicleCounts.map(data => data.classification_name);
+        const vehicledata = vehicleCounts.map(data => data.vehicle_count);
+
+        const chart = new Chart( vehicleChart, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Vehicles by Classification',
+                    data: vehicledata,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true 
+                    }
+                },
+                plugins: {
+                    datalabels: {
+                        color: '#333', 
+                        formatter: (value) => {
+                            return value; 
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels] 
+        });
+
+        const milesPrices = <%- milesPrices ? JSON.stringify(milesPrices) : '[]' %>;
+
+        const scatterplot = document.getElementById('scatterChart').getContext('2d');
+        const milesPricedata = {
+            datasets: [{
+                label: 'Vehicles',
+                data: milesPrices.map(vehicle => ({
+                    x: vehicle.inv_miles,
+                    y: vehicle.inv_price
+                })),
+                backgroundColor: 'rgba(75, 192, 192, 1)',
+            }]
+        };
+
+        const scatterChart = new Chart(scatterplot, {
+            type: 'scatter',
+            data: milesPricedata,
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Miles'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Price'
+                        },
+                        beginAtZero: true
+                    }
+                },
+                responsive: true
+            }
+        });
+    });
+
+</script>
+
+
+

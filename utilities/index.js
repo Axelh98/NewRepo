@@ -8,7 +8,7 @@ require("dotenv").config();
  ************************** */
 Util.getNav = async function (req, res, next) {
   let data = await invModel.getClassifications();
-  console.log(data);
+  // console.log(data);
   let list = "<ul>";
 
   list += '<li><a href="/" title="Home page">Home</a></li>';
@@ -161,6 +161,7 @@ Util.checkJWTToken = (req, res, next) => {
         }
         res.locals.accountData = accountData;
         res.locals.loggedin = 1;
+        // console.log(res.locals.loggedin)
         next();
       }
     );
@@ -172,15 +173,27 @@ Util.checkJWTToken = (req, res, next) => {
 /* ****************************************
  *  Check Login
  * ************************************ */
+// Util.checkLogin = (req, res, next) => {
+//   console.log("Usuario autenticado:", req.isAuthenticated());
+//   if (req.isAuthenticated()) {
+//       res.locals.loggedin = req.user;
+//       return next();
+//   } else {
+//       return res.redirect('/login');
+//   }
+// };
+
 Util.checkLogin = (req, res, next) => {
-  console.log("Usuario autenticado:", req.isAuthenticated());
-  if (req.isAuthenticated()) {
-      res.locals.loggedin = req.user;
-      return next();
+  console.log("checkLogin")
+  console.log(res.locals)
+  if (res.locals.loggedin) {
+    console.log(2)
+    next()
   } else {
-      return res.redirect('/login');
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
   }
-};
+}
 
 
 /* ***************************************
