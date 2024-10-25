@@ -118,6 +118,28 @@ async function getAllAccounts() {
   }
 }
 
+async function updateOtherAccount(account_id, account_firstname, account_lastname, account_email, account_type) {
+  try {
+    const sql = `
+      UPDATE account
+      SET account_firstname = $1,
+          account_lastname = $2,
+          account_email = $3,
+          account_type = $4
+      WHERE account_id = $5
+      RETURNING *;
+    `;
+
+    const values = [account_firstname, account_lastname, account_email, account_type, account_id];
+    const result = await pool.query(sql, values);
+
+    return result.rowCount > 0 ? result.rows[0] : null;
+  } catch (error) {
+    console.error("Error updating account:", error);
+    throw error;
+  }
+}
 
 
-  module.exports = { registerAccount , checkExistingEmail , verifyLogin, getAccountByEmail, getAccountById, updateAccount, changePassword, getAllAccounts}
+
+  module.exports = { registerAccount , checkExistingEmail , verifyLogin, getAccountByEmail, getAccountById, updateAccount, changePassword, getAllAccounts, updateOtherAccount}

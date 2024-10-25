@@ -1,0 +1,30 @@
+<h1>Edit Account</h1>
+<% if (errors) { %>
+  <div class="error-messages">
+    <ul>
+      <% errors.forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+
+<form action="/account/update/<%= account.account_id %>" method="POST">
+  <label for="account_firstname">First Name:</label>
+  <input type="text" id="account_firstname" name="account_firstname" value="<%= account.account_firstname %>" required>
+
+  <label for="account_lastname">Last Name:</label>
+  <input type="text" id="account_lastname" name="account_lastname" value="<%= account.account_lastname %>" required>
+
+  <label for="account_email">Email:</label>
+  <input type="email" id="account_email" name="account_email" value="<%= account.account_email %>" required>
+
+  <label for="account_type">Account Type:</label>
+  <select id="account_type" name="account_type" required>
+    <option value="Client" <%= account.account_type === "Client" ? "selected" : "" %>>Client</option>
+    <option value="Employee" <%= account.account_type === "Employee" ? "selected" : "" %>>Employee</option>
+    <option value="Admin" <%= account.account_type === "Admin" ? "selected" : "" %>>Admin</option>
+  </select>
+
+  <button type="submit">Update Account</button>
+</form>

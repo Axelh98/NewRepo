@@ -4,60 +4,36 @@ const utilities = require("../utilities");
 const accountController = require("../controllers/accountController");
 const regValidate = require("../utilities/account-validation");
 
+// Login
 router.get("/login", utilities.handleErrors(accountController.buildLogin));
+router.post("/login", utilities.handleErrors(accountController.accountLogin));
 
+// Register
+router.get("/register", utilities.handleErrors(accountController.buildRegister));
+router.post("/register", regValidate.registrationRules(), regValidate.checkRegData, utilities.handleErrors(accountController.registerAccount));
 
-router.get(
-  "/management",
-  utilities.checkLogin,
-  utilities.handleErrors(accountController.accountManagement)
-);
+// Account Management
+router.get("/management", utilities.checkLogin, utilities.handleErrors(accountController.accountManagement));
 
-router.get(
-  "/register",
-  utilities.handleErrors(accountController.buildRegister)
-);
+// Update Account (for logged-in user)
+router.get("/update-account/:id", utilities.checkLogin, utilities.handleErrors(accountController.buildUpdate));
+router.post("/update-account/:id", utilities.checkLogin, utilities.handleErrors(accountController.updateAccount));
 
-router.get(
-  "/update-account/:id",
-  utilities.checkLogin,
-  utilities.handleErrors(accountController.buildUpdate)
-);
+// Update Other Account (Admin only)
+router.get("/edit/:id", utilities.checkLogin, utilities.handleErrors(accountController.editAccountForm));
+router.post("/update/:id", utilities.checkLogin, utilities.handleErrors(accountController.updateOtherAccount));
 
+// Change Password
+router.post("/change-password", utilities.checkLogin, utilities.handleErrors(accountController.changePassword));
+
+// Logout
 router.get('/logout', utilities.checkLogin, (req, res) => {
-  req.session.destroy((err) => {
-      if (err) {
-          return res.status(500).send('Error al cerrar sesión.');
-      }
-      res.redirect('/account/login'); 
-  });
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).send('Error al cerrar sesión.');
+        }
+        res.redirect('/account/login'); 
+    });
 });
-
-router.post(
-  "/login",
-  // regValidate.registrationRules(),
-  // regValidate.checkRegData,
-  utilities.handleErrors(accountController.accountLogin)
-);
-
-router.post(
-  "/register",
-  regValidate.registrationRules(),
-  regValidate.checkRegData,
-  utilities.handleErrors(accountController.registerAccount)
-);
-
-router.post(
-  "/update-account",
-  utilities.checkLogin,
-  accountController.updateAccount
-);
-
-router.post(
-  "/change-password",
-  utilities.handleErrors(accountController.changePassword)
-);
-
-
 
 module.exports = router;

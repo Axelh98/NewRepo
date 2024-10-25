@@ -242,6 +242,42 @@ async function changePassword(req, res) {
   }
 }
 
+async function editAccountForm(req, res) {
+  const accountId = req.params.id;
+  const account = await accountModel.getAccountById(accountId); 
+  
+  let nav = await utilities.getNav();
+  res.render('account/edit-account', {
+    title: "Edit Account",
+    nav,
+    account,
+    errors: null,
+  });
+}
+
+async function updateOtherAccount(req, res) {
+  const accountId = req.params.id;
+  const { account_firstname, account_lastname, account_email, account_type } = req.body;
+
+  const updateResult = await accountModel.updateOtherAccount(
+    accountId,
+    account_firstname,
+    account_lastname,
+    account_email,
+    account_type
+  );
+
+  if (updateResult) {
+    req.flash("notice", "Account updated successfully.");
+    res.redirect("/account/management");
+  } else {
+    req.flash("notice", "Account update failed.");
+    res.redirect(`/account/edit/${accountId}`);
+  }
+}
+
+
+
 
 
 
@@ -255,5 +291,7 @@ module.exports = {
   verifyToken,
   buildUpdate,
   updateAccount,
-  changePassword
+  changePassword,
+  editAccountForm,
+  updateOtherAccount
 };
